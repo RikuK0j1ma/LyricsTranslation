@@ -2,7 +2,7 @@
 
 title: LyricsTranslation
 
-emoji: 🏢
+emoji: 🎵
 
 colorFrom: gray
 
