@@ -1,7 +1,15 @@
-﻿import gradio as gr
+﻿from fastapi import FastAPI
+import gradio as gr
 
-def greet(name):
-    return "Hello " + name + "!!"
+from app.presentation.ui import build_ui
+from app.infrastructure.spotify.auth import router as auth_router
 
-demo = gr.Interface(fn=greet, inputs="text", outputs="text")
-demo.launch()
+# FastAPI 本体
+fastapi_app = FastAPI(title="Spotify Lyrics Translator (Personal)")
+
+# Spotify OAuth ルーター
+fastapi_app.include_router(auth_router, prefix="")
+
+# Gradio UI を FastAPI にマウント
+demo = build_ui()
+app = gr.mount_gradio_app(fastapi_app, demo, path="/")
