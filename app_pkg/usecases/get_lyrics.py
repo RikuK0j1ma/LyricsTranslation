@@ -1,6 +1,6 @@
-from app.domain.entities import Track, Lyrics
-from app.domain.exceptions import LyricsNotFoundError
-from app.infrastructure.lyrics.base import LyricsProvider
+from app_pkg.domain.entities import Track, Lyrics
+from app_pkg.domain.exceptions import LyricsNotFoundError
+from app_pkg.infrastructure.lyrics.base import LyricsProvider
 
 class GetLyricsUseCase:
     def __init__(self, provider: LyricsProvider):

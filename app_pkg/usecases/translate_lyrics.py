@@ -1,6 +1,6 @@
-from app.domain.entities import Lyrics
-from app.domain.exceptions import TranslationError
-from app.infrastructure.translation.base import Translator
+from app_pkg.domain.entities import Lyrics
+from app_pkg.domain.exceptions import TranslationError
+from app_pkg.infrastructure.translation.base import Translator
 
 class TranslateLyricsUseCase:
     def __init__(self, translator: Translator):

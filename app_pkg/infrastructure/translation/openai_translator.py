@@ -1,5 +1,5 @@
-from app.infrastructure.translation.base import Translator
-from app.infrastructure.config import SETTINGS
+from app_pkg.infrastructure.translation.base import Translator
+from app_pkg.infrastructure.config import SETTINGS
 
 try:
     from openai import AsyncOpenAI

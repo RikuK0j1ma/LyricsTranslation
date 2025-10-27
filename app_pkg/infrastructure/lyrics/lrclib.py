@@ -1,7 +1,7 @@
 from typing import List, Optional
 import httpx
-from app.domain.entities import Lyrics
-from app.infrastructure.lyrics.base import LyricsProvider
+from app_pkg.domain.entities import Lyrics
+from app_pkg.infrastructure.lyrics.base import LyricsProvider
 
 class LRCLIBProvider(LyricsProvider):
     name = "lrclib"

@@ -1,9 +1,9 @@
 import time
 from typing import Optional
 import httpx
-from app.domain.entities import Track
-from app.infrastructure.spotify.repositories import token_repo
-from app.infrastructure.config import SETTINGS
+from app_pkg.domain.entities import Track
+from app_pkg.infrastructure.spotify.repositories import token_repo
+from app_pkg.infrastructure.config import SETTINGS
 
 SPOTIFY_API = "https://api.spotify.com/v1"
 

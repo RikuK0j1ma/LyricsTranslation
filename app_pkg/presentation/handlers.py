@@ -1,16 +1,16 @@
 import gradio as gr
 
-from app.infrastructure.config import SETTINGS
-from app.infrastructure.spotify.client import SpotifyClient
-from app.infrastructure.spotify.repositories import token_repo
-from app.infrastructure.lyrics.lrclib import LRCLIBProvider
-from app.infrastructure.lyrics.musixmatch import MusixmatchProvider
-from app.infrastructure.translation.openai_translator import OpenAITranslator
-from app.infrastructure.translation.hf_inference_translator import HFInferenceTranslator
-from app.usecases.get_current_track import GetCurrentTrackUseCase
-from app.usecases.get_lyrics import GetLyricsUseCase
-from app.usecases.translate_lyrics import TranslateLyricsUseCase
-from app.domain.exceptions import NotLoggedInError, NotPlayingError, LyricsNotFoundError, TranslationError
+from app_pkg.infrastructure.config import SETTINGS
+from app_pkg.infrastructure.spotify.client import SpotifyClient
+from app_pkg.infrastructure.spotify.repositories import token_repo
+from app_pkg.infrastructure.lyrics.lrclib import LRCLIBProvider
+from app_pkg.infrastructure.lyrics.musixmatch import MusixmatchProvider
+from app_pkg.infrastructure.translation.openai_translator import OpenAITranslator
+from app_pkg.infrastructure.translation.hf_inference_translator import HFInferenceTranslator
+from app_pkg.usecases.get_current_track import GetCurrentTrackUseCase
+from app_pkg.usecases.get_lyrics import GetLyricsUseCase
+from app_pkg.usecases.translate_lyrics import TranslateLyricsUseCase
+from app_pkg.domain.exceptions import NotLoggedInError, NotPlayingError, LyricsNotFoundError, TranslationError
 
 def _lyrics_provider():
     if SETTINGS.lyrics_provider == "musixmatch" and SETTINGS.musixmatch_api_key:

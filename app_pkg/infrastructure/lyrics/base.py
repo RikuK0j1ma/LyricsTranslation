@@ -1,5 +1,5 @@
 from typing import List, Optional
-from app.domain.entities import Lyrics
+from app_pkg.domain.entities import Lyrics
 
 class LyricsProvider:
     name: str = "base"
