@@ -1,8 +1,8 @@
 from typing import Optional
-from app.domain.entities import Track
-from app.domain.exceptions import NotLoggedInError, NotPlayingError
-from app.infrastructure.spotify.client import SpotifyClient
-from app.infrastructure.spotify.repositories import TokenRepository
+from app_pkg.domain.entities import Track
+from app_pkg.domain.exceptions import NotLoggedInError, NotPlayingError
+from app_pkg.infrastructure.spotify.client import SpotifyClient
+from app_pkg.infrastructure.spotify.repositories import TokenRepository
 
 class GetCurrentTrackUseCase:
     def __init__(self, token_repo: TokenRepository, spotify_client: SpotifyClient):

@@ -1,5 +1,5 @@
 import gradio as gr
-from app.presentation.handlers import fetch_and_translate, poll_now_playing
+from app_pkg.presentation.handlers import fetch_and_translate, poll_now_playing
 
 LANG_CHOICES = [
     ("日本語 (ja)", "ja"),

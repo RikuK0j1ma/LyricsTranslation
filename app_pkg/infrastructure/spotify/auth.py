@@ -4,8 +4,8 @@ import httpx
 from fastapi import APIRouter, Request, HTTPException
 from fastapi.responses import RedirectResponse, PlainTextResponse
 
-from app.infrastructure.config import SETTINGS
-from app.infrastructure.spotify.repositories import token_repo
+from app_pkg.infrastructure.config import SETTINGS
+from app_pkg.infrastructure.spotify.repositories import token_repo
 
 router = APIRouter()
 

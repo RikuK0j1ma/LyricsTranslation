@@ -1,8 +1,8 @@
-﻿from fastapi import FastAPI
+from fastapi import FastAPI
 import gradio as gr
 
-from app.presentation.ui import build_ui
-from app.infrastructure.spotify.auth import router as auth_router
+from app_pkg.presentation.ui import build_ui
+from app_pkg.infrastructure.spotify.auth import router as auth_router
 
 # FastAPI 本体
 fastapi_app = FastAPI(title="Spotify Lyrics Translator (Personal)")
