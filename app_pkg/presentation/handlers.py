@@ -18,7 +18,7 @@ def _lyrics_provider():
     return LRCLIBProvider()
 
 def _translator_or_none():
-    # 優先: OpenAI -> HF Inference。どちらも未設定なら None を返す。
+    # Priority: OpenAI -> HF Inference. If neither is configured, return None.
     try:
         if SETTINGS.openai_api_key:
             return OpenAITranslator()
@@ -56,8 +56,8 @@ async def fetch_and_translate(lang_code: str, request: gr.Request):
         if translator is None:
             translated = ""
             status = (
-                f"Provider: {lyrics.provider} / Translator: 未設定 "
-                "(OPENAI_API_KEY または HUGGINGFACEHUB_API_TOKEN + TRANSLATION_MODEL を設定してください)"
+                f"Provider: {lyrics.provider} / Translator: Not configured "
+                "(Please set OPENAI_API_KEY or HUGGINGFACEHUB_API_TOKEN + TRANSLATION_MODEL)"
             )
         else:
             translate_uc = TranslateLyricsUseCase(translator)
@@ -65,15 +65,15 @@ async def fetch_and_translate(lang_code: str, request: gr.Request):
             status = f"Provider: {lyrics.provider} / Translator: {translator.__class__.__name__}"
 
     except NotLoggedInError:
-        status = "Spotify と連携してください。"
+        status = "Please connect with Spotify."
     except NotPlayingError:
-        status = "Spotify で何らかの曲を再生してください。"
+        status = "Please play a track on Spotify."
     except LyricsNotFoundError:
-        status = "歌詞が見つかりませんでした。"
+        status = "Lyrics not found."
     except TranslationError as e:
-        status = f"翻訳に失敗しました: {e}"
+        status = f"Translation failed: {e}"
     except Exception as e:
-        status = f"エラー: {e}"
+        status = f"Error: {e}"
 
     return title, artists, original, translated, status
 

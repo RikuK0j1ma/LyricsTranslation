@@ -11,13 +11,13 @@ class GetCurrentTrackUseCase:
 
     async def execute(self, session_id: Optional[str]) -> Track:
         if not session_id:
-            raise NotLoggedInError("Spotify にログインしてください。")
+            raise NotLoggedInError("Please log in to Spotify.")
 
         tokens = self.token_repo.get(session_id)
         if not tokens:
-            raise NotLoggedInError("Spotify セッションが見つかりません。ログインしてください。")
+            raise NotLoggedInError("Spotify session not found. Please log in.")
 
         track = await self.spotify.get_currently_playing(tokens)
         if track is None:
-            raise NotPlayingError("Spotify で何らかの曲を再生してください。")
+            raise NotPlayingError("Please play a track on Spotify.")
         return track

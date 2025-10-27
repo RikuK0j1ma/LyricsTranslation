@@ -27,7 +27,7 @@ def _new_session_id() -> str:
 @router.get("/login")
 async def login():
     if not SETTINGS.spotify_client_id or not SETTINGS.spotify_redirect_uri:
-        raise HTTPException(status_code=500, detail="SpotifyクライアントID/リダイレクトURIが未設定です。")
+        raise HTTPException(status_code=500, detail="Spotify Client ID / Redirect URI is not configured.")
 
     state = secrets.token_urlsafe(16)
     verifier = _new_code_verifier()
@@ -51,9 +51,9 @@ async def login():
 @router.get("/callback")
 async def callback(request: Request, code: Optional[str] = None, state: Optional[str] = None, error: Optional[str] = None):
     if error:
-        return PlainTextResponse(f"Spotify認可エラー: {error}", status_code=400)
+        return PlainTextResponse(f"Spotify authorization error: {error}", status_code=400)
     if not code or not state or state not in _state_pkce:
-        return PlainTextResponse("state/code が不正です。", status_code=400)
+        return PlainTextResponse("Invalid state/code.", status_code=400)
 
     verifier = _state_pkce.pop(state)
     data = {
@@ -66,7 +66,7 @@ async def callback(request: Request, code: Optional[str] = None, state: Optional
     async with httpx.AsyncClient(timeout=30) as client:
         token_res = await client.post("https://accounts.spotify.com/api/token", data=data)
     if token_res.status_code != 200:
-        return PlainTextResponse(f"トークン交換失敗: {token_res.text}", status_code=400)
+        return PlainTextResponse(f"Token exchange failed: {token_res.text}", status_code=400)
 
     payload = token_res.json()
     session_id = _new_session_id()
@@ -76,7 +76,7 @@ async def callback(request: Request, code: Optional[str] = None, state: Optional
         "expires_at": time.time() + int(payload.get("expires_in", 3600) * 0.95),
     })
 
-    # クッキーへセッション付与
+    # Attach session via cookie
     resp = RedirectResponse(url="/")
     resp.set_cookie("session_id", session_id, max_age=60*60*24*7, secure=True, httponly=True, samesite="lax", path="/")
     return resp
