@@ -3,8 +3,7 @@ title: LyricsTranslation
 emoji: 🎵
 colorFrom: gray
 colorTo: indigo
-sdk: fastapi
-sdk_version: 0.2
-app_file: app.py
+sdk: docker
+app_port: 7860
 pinned: false
 ---
