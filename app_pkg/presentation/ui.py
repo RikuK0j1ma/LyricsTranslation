@@ -3,16 +3,20 @@ from app_pkg.presentation.handlers import fetch_and_translate, poll_now_playing
 
 LANG_CHOICES = [
     ("日本語 (ja)", "ja"),
-    ("英語 (en)", "en"),
-    ("韓国語 (ko)", "ko"),
-    ("中国語簡体字 (zh)", "zh"),
-    ("フランス語 (fr)", "fr"),
-    ("ドイツ語 (de)", "de"),
-    ("スペイン語 (es)", "es"),
-    ("イタリア語 (it)", "it"),
-    ("ポルトガル語 (pt)", "pt"),
-    ("インドネシア語 (id)", "id"),
-    ("ベトナム語 (vi)", "vi"),
+    ("English (en)", "en"),
+    ("한국어 (ko)", "ko"),
+    ("简体中文 (zh)", "zh"),
+    ("Français (fr)", "fr"),
+    ("Deutsch (de)", "de"),
+    ("Español (es)", "es"),
+    ("Italiano (it)", "it"),
+    ("Português (pt)", "pt"),
+    ("Bahasa Indonesia (id)", "id"),
+    ("Tiếng Việt (vi)", "vi"),
+    ("Polski (pl)", "pl"),
+    ("Suomi (fi)", "fi"),
+    ("Русский (ru)", "ru"),
+    ("Українська (uk)", "uk"),
 ]
 
 def build_ui():
@@ -20,28 +24,28 @@ def build_ui():
     .mono { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;}
     .tight textarea { line-height: 1.35; }
     """) as demo:
-        gr.Markdown("## 🎧 Spotify 歌詞翻訳（個人利用）\nプレイヤー機能はありません。Spotify で曲を再生してからお使いください。")
+        gr.Markdown("## 🎧 Spotify Lyrics Translator (Personal Use)\nNo built-in player. Please start playback on Spotify before using this app.")
 
         with gr.Row():
-            gr.HTML('<a class="gr-button gr-button-lg" href="/login">Spotify と連携</a>')
-            gr.HTML('<a class="gr-button" href="/logout">ログアウト</a>')
-            lang = gr.Dropdown(LANG_CHOICES, value="ja", label="翻訳先言語")
+            gr.HTML('<a class="gr-button gr-button-lg" href="/login">Connect with Spotify</a>')
+            gr.HTML('<a class="gr-button" href="/logout">Logout</a>')
+            lang = gr.Dropdown(LANG_CHOICES, value="ja", label="Target language")
 
         with gr.Row():
             with gr.Column():
-                title = gr.Textbox(label="曲名", interactive=False)
-                artists = gr.Textbox(label="アーティスト", interactive=False)
-                original = gr.Textbox(label="歌詞（原文）", lines=16, elem_classes=["mono", "tight"], interactive=False)
+                title = gr.Textbox(label="Title", interactive=False)
+                artists = gr.Textbox(label="Artists", interactive=False)
+                original = gr.Textbox(label="Lyrics (original)", lines=16, elem_classes=["mono", "tight"], interactive=False)
             with gr.Column():
-                translated = gr.Textbox(label="歌詞（翻訳）", lines=16, elem_classes=["mono", "tight"], interactive=False)
-        status = gr.Markdown("状態: 未実行")
+                translated = gr.Textbox(label="Lyrics (translated)", lines=16, elem_classes=["mono", "tight"], interactive=False)
+        status = gr.Markdown("Status: idle")
 
-        btn = gr.Button("今すぐ取得 / 翻訳", variant="primary")
+        btn = gr.Button("Fetch / Translate now", variant="primary")
         btn.click(fn=fetch_and_translate, inputs=[lang], outputs=[title, artists, original, translated, status])
 
-        # 10秒ごとに自動更新
+        # Auto refresh every 10 seconds
         timer = gr.Timer(10, active=True)
         timer.tick(fn=poll_now_playing, inputs=[lang], outputs=[title, artists, original, translated, status])
 
-        gr.Markdown("> ⚠️ 歌詞は外部APIの提供状況に依存します。商用利用は禁止です。翻訳には OpenAI または HF Inference のAPIキーが必要です。")
+        gr.Markdown("> ⚠️ Lyrics availability depends on external APIs. Commercial use is prohibited. Translation requires an API key for OpenAI or HF Inference.")
     return demo

@@ -9,5 +9,5 @@ class GetLyricsUseCase:
     async def execute(self, track: Track) -> Lyrics:
         lyrics = await self.provider.get_lyrics(track.title, track.artists)
         if not lyrics or not lyrics.text.strip():
-            raise LyricsNotFoundError("歌詞が見つかりませんでした。")
+            raise LyricsNotFoundError("Lyrics not found.")
         return lyrics
