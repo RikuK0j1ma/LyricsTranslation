@@ -31,8 +31,19 @@ jobs:
           git remote remove hf 2>/dev/null || true
           git remote add hf "$HF_SPACE_URL"
           git remote set-url --push hf "$HF_PUSH_URL"
-          git remote -v
 
-      - name: Push to HF Space (main)
+      - name: Fetch HF and decide push mode
         run: |
-          git push hf main:main --follow-tags --force-with-lease
+          set -e
+          # リモートの現在値を取得（これがないと --force-with-lease が stale になる）
+          git fetch hf main || true
+
+          # HF が behind/equal なら通常 push、diverge/advance なら GitHub を正として上書き
+          if git merge-base --is-ancestor hf/main HEAD ; then
+            echo "HF is behind or equal -> normal push"
+            git push hf main:main --follow-tags
+          else
+            echo "HF has divergent/ahead commits -> overwrite with GitHub main"
+            # 直前にfetchしているので lease でも通るが、意図が明確なので通常の --force で上書き
+            git push hf main:main --follow-tags --force
+          fi
