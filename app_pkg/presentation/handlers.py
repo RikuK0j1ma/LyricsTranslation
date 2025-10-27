@@ -77,5 +77,41 @@ async def fetch_and_translate(lang_code: str, request: gr.Request):
 
     return title, artists, original, translated, status
 
-async def poll_now_playing(lang_code: str, request: gr.Request):
-    return await fetch_and_translate(lang_code, request)
+async def poll_now_playing(lang_code: str, prev_translated: str, request: gr.Request):
+    session_id = request.cookies.get("session_id")
+    get_track = GetCurrentTrackUseCase(token_repo, spotify_client)
+    lyrics_uc = GetLyricsUseCase(_lyrics_provider())
+
+    status = ""
+    title = ""
+    artists = ""
+    original = ""
+
+    try:
+        track = await get_track.execute(session_id)
+        title = track.title
+        artists = track.artists_text
+
+        lyrics = await lyrics_uc.execute(track)
+        original = lyrics.text
+
+        translator = _translator_or_none()
+        if translator is None:
+            status = (
+                f"Provider: {lyrics.provider} / Translator: Not configured (translation runs only when you click the button)"
+            )
+        else:
+            status = (
+                f"Provider: {lyrics.provider} / Translator: {translator.__class__.__name__} (translation runs only when you click the button)"
+            )
+
+    except NotLoggedInError:
+        status = "Please connect with Spotify."
+    except NotPlayingError:
+        status = "Please play a track on Spotify."
+    except LyricsNotFoundError:
+        status = "Lyrics not found."
+    except Exception as e:
+        status = f"Error: {e}"
+
+    return title, artists, original, prev_translated, status

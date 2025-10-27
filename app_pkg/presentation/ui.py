@@ -45,7 +45,8 @@ def build_ui():
 
         # Auto refresh every 10 seconds
         timer = gr.Timer(10, active=True)
-        timer.tick(fn=poll_now_playing, inputs=[lang], outputs=[title, artists, original, translated, status])
+        # Keep the translated field unchanged during auto refresh by passing it as input
+        timer.tick(fn=poll_now_playing, inputs=[lang, translated], outputs=[title, artists, original, translated, status])
 
         gr.Markdown("> ⚠️ Lyrics availability depends on external APIs. Commercial use is prohibited. Translation requires an API key for OpenAI or HF Inference.")
     return demo
